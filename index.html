@@ -4,478 +4,4046 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Family Board</title>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Quicksand:wght@500;600;700&display=swap">
+<link rel="stylesheet"
+href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Quicksand:wght@500;600;700&display=swap">
+
 <style>
 :root{
   color-scheme:light;
-  --bg:#FBF1DF; --card:#FFFFFF; --ink:#2E2A26; --ink-soft:#8A7C6C;
-  --pine:#2C6659; --pine-deep:#204B41; --coral:#FF6E52; --coral-deep:#E5502F;
-  --mustard:#F0A93C; --berry:#C1445F; --line:#EDE0C4; --shadow:0 4px 0 rgba(46,42,38,.10);
-  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#FBF1DF;
+  --card:#FFFFFF;
+  --ink:#2E2A26;
+  --ink-soft:#8A7C6C;
+  --pine:#2C6659;
+  --pine-deep:#204B41;
+  --coral:#FF6E52;
+  --coral-deep:#E5502F;
+  --mustard:#F0A93C;
+  --berry:#C1445F;
+  --line:#EDE0C4;
+  --shadow:0 4px 0 rgba(46,42,38,.10);
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
   box-sizing:border-box;
 }
+
 *{box-sizing:border-box;}
-html{scroll-padding-top:env(safe-area-inset-top,0px); height:100%;}
-body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:'Quicksand',sans-serif;font-weight:600;}
-h1,h2,h3{font-family:'Fredoka',sans-serif;margin:0;font-weight:600;}
-button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;}
-.app{max-width:920px;margin:0 auto;padding:0 16px 96px;min-height:100%;}
-.topbar{display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--pine);color:#fff;padding:calc(16px + env(safe-area-inset-top,0px)) 16px 14px;margin:0 -16px 18px;border-radius:0 0 24px 24px;}
-.topbar .fam{font-family:'Fredoka';font-weight:600;font-size:19px;color:#fff;}
-.card{background:var(--card);border:2px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:18px;margin-bottom:16px;}
-.btn{display:inline-flex;align-items:center;gap:8px;background:var(--coral);color:#fff;padding:12px 18px;border-radius:14px;font-weight:700;font-size:15px;box-shadow:0 4px 0 var(--coral-deep);transition:transform .1s,box-shadow .1s;}
-.btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--coral-deep);}
-.btn.secondary{background:var(--pine);box-shadow:0 4px 0 var(--pine-deep);}
-.btn.ghost{background:var(--card);color:var(--pine-deep);border:2px solid var(--line);box-shadow:none;}
-.btn.ghost:active{transform:translateY(1px);}
-.btn.small{padding:8px 12px;font-size:13px;border-radius:10px;}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;}
-.member-card{background:var(--card);border:2px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:0 16px 16px;display:flex;flex-direction:column;gap:8px;cursor:pointer;transition:transform .12s;overflow:hidden;}
-.member-card:active{transform:translateY(2px);}
-.mc-banner{margin:0 -16px;height:44px;border-radius:16px 16px 0 0;}
-.avatar{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.15);}
-.mc-head{display:flex;align-items:center;gap:12px;margin-top:-30px;}
-.mc-name{font-family:'Fredoka';font-weight:600;font-size:17px;color:var(--ink);}
-.mc-pts{font-size:13px;color:var(--ink-soft);font-weight:700;}
-.bar{height:12px;background:var(--line);border-radius:8px;overflow:hidden;}
-.bar>span{display:block;height:100%;background:linear-gradient(90deg,var(--coral),var(--mustard));border-radius:8px;transition:width .5s;}
-.recent{font-size:12px;color:var(--ink-soft);font-weight:600;}
-.nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:2px solid var(--line);display:flex;justify-content:space-around;padding:8px 4px calc(8px + env(safe-area-inset-bottom,0px));z-index:20;}
-.nav button{display:flex;flex-direction:column;align-items:center;font-size:10px;font-weight:700;gap:3px;color:var(--ink-soft);padding:4px 8px;border-radius:10px;}
-.nav button.active{color:var(--pine-deep);background:#E7F2EE;}
-.nav .ic{font-size:19px;}
-.modal-bg{position:fixed;inset:0;background:rgba(32,28,24,.5);display:flex;align-items:flex-end;justify-content:center;z-index:50;}
-.modal{background:var(--card);border-radius:24px 24px 0 0;padding:22px 18px calc(24px + env(safe-area-inset-bottom,0px));width:100%;max-width:520px;max-height:88vh;overflow-y:auto;animation:up .25s ease;}
-@keyframes up{from{transform:translateY(30px);opacity:0}to{transform:translateY(0);opacity:1}}
-@media(min-width:680px){.modal-bg{align-items:center;}.modal{border-radius:24px;}}
-label{font-size:13px;font-weight:700;color:var(--ink-soft);display:block;margin:12px 0 5px;}
-input,select,textarea{width:100%;padding:11px 13px;border-radius:12px;border:2px solid var(--line);background:var(--bg);color:var(--ink);font-family:inherit;font-weight:600;font-size:15px;}
-.chiprow{display:flex;flex-wrap:wrap;gap:8px;}
-.chip{padding:8px 12px;border-radius:12px;border:2px solid var(--line);font-size:14px;background:var(--bg);font-weight:700;color:var(--ink);}
-.chip.sel{border-color:var(--coral);background:#FFE4DC;color:var(--coral-deep);}
-.emoji-pick{display:flex;flex-wrap:wrap;gap:8px;}
-.emoji-pick button{font-size:22px;padding:8px;border-radius:12px;background:var(--bg);border:2px solid transparent;}
-.emoji-pick button.sel{border-color:var(--coral);}
-.color-pick{display:flex;flex-wrap:wrap;gap:8px;}
-.color-dot{width:32px;height:32px;border-radius:50%;border:3px solid transparent;}
-.color-dot.sel{border-color:var(--ink);}
-.section-title{display:flex;align-items:center;gap:8px;margin-bottom:12px;}
-.pill{font-size:12px;background:var(--mustard);color:#5c3d00;padding:3px 10px;border-radius:20px;font-weight:800;}
-.empty{text-align:center;color:var(--ink-soft);padding:30px 10px;font-weight:700;}
-.acc-item{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:2px solid var(--line);}
-.acc-item:last-child{border-bottom:none;}
-.badge{display:inline-flex;flex-direction:column;align-items:center;gap:4px;width:76px;font-size:11px;font-weight:700;text-align:center;opacity:.32;}
-.badge.on{opacity:1;}
-.badge .ic{font-size:26px;}
-.week-row{display:flex;justify-content:space-between;padding:12px 0;border-bottom:2px solid var(--line);cursor:pointer;}
-.week-row:last-child{border-bottom:none;}
-.toast{position:fixed;top:calc(16px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:14px;font-weight:700;font-size:14px;z-index:80;animation:pop .3s ease;}
-@keyframes pop{from{opacity:0;transform:translate(-50%,-10px)}to{opacity:1;transform:translate(-50%,0)}}
-.prize-card{border:2px solid var(--line);border-radius:16px;padding:14px;margin-bottom:10px;font-weight:700;}
-.setup-wrap{max-width:480px;margin:40px auto;padding:0 16px;}
-.switch-row{display:flex;align-items:center;gap:12px;padding:12px;border-radius:16px;border:2px solid var(--line);margin-bottom:10px;cursor:pointer;}
-.switch-row:active{background:var(--bg);}
-.whoami{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#fff;background:rgba(255,255,255,.15);padding:6px 10px;border-radius:20px;}
-.whoami .avatar{width:26px;height:26px;font-size:14px;border-width:2px;}
-.lock{font-size:12px;color:var(--ink-soft);font-weight:700;}
-.admin-tag{background:var(--mustard);color:#5c3d00;font-size:10px;font-weight:800;padding:2px 7px;border-radius:8px;}
-.step-dots{display:flex;gap:6px;justify-content:center;margin:16px 0;}
-.step-dots span{width:8px;height:8px;border-radius:50%;background:var(--line);}
-.step-dots span.on{background:var(--coral);}
-::-webkit-scrollbar{width:6px;} ::-webkit-scrollbar-thumb{background:var(--line);border-radius:6px;}
+
+html{
+  scroll-padding-top:env(safe-area-inset-top,0px);
+  height:100%;
+}
+
+body{
+  margin:0;
+  height:100%;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:'Quicksand',sans-serif;
+  font-weight:600;
+}
+
+h1,h2,h3{
+  font-family:'Fredoka',sans-serif;
+  margin:0;
+  font-weight:600;
+}
+
+button{
+  font-family:inherit;
+  cursor:pointer;
+  border:none;
+  background:none;
+  color:inherit;
+}
+
+.app{
+  max-width:920px;
+  margin:0 auto;
+  padding:0 16px 96px;
+  min-height:100%;
+}
+
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  background:var(--pine);
+  color:#fff;
+  padding:calc(16px + env(safe-area-inset-top,0px)) 16px 14px;
+  margin:0 -16px 18px;
+  border-radius:0 0 24px 24px;
+}
+
+.topbar .fam{
+  font-family:'Fredoka';
+  font-weight:600;
+  font-size:19px;
+  color:#fff;
+}
+
+.card{
+  background:var(--card);
+  border:2px solid var(--line);
+  border-radius:20px;
+  box-shadow:var(--shadow);
+  padding:18px;
+  margin-bottom:16px;
+}
+
+.btn{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  background:var(--coral);
+  color:#fff;
+  padding:12px 18px;
+  border-radius:14px;
+  font-weight:700;
+  font-size:15px;
+  box-shadow:0 4px 0 var(--coral-deep);
+  transition:transform .1s,box-shadow .1s;
+}
+
+.btn:active{
+  transform:translateY(3px);
+  box-shadow:0 1px 0 var(--coral-deep);
+}
+
+.btn.secondary{
+  background:var(--pine);
+  box-shadow:0 4px 0 var(--pine-deep);
+}
+
+.btn.ghost{
+  background:var(--card);
+  color:var(--pine-deep);
+  border:2px solid var(--line);
+  box-shadow:none;
+}
+
+.btn.ghost:active{
+  transform:translateY(1px);
+}
+
+.btn.small{
+  padding:8px 12px;
+  font-size:13px;
+  border-radius:10px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+  gap:14px;
+}
+
+.member-card{
+  background:var(--card);
+  border:2px solid var(--line);
+  border-radius:20px;
+  box-shadow:var(--shadow);
+  padding:0 16px 16px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  cursor:pointer;
+  transition:transform .12s;
+  overflow:hidden;
+}
+
+.member-card:active{
+  transform:translateY(2px);
+}
+
+.mc-banner{
+  margin:0 -16px;
+  height:44px;
+  border-radius:16px 16px 0 0;
+}
+
+.avatar{
+  width:56px;
+  height:56px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:28px;
+  flex-shrink:0;
+  border:3px solid #fff;
+  box-shadow:0 2px 6px rgba(0,0,0,.15);
+}
+
+.mc-head{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-top:-30px;
+}
+
+.mc-name{
+  font-family:'Fredoka';
+  font-weight:600;
+  font-size:17px;
+  color:var(--ink);
+}
+
+.mc-pts{
+  font-size:13px;
+  color:var(--ink-soft);
+  font-weight:700;
+}
+
+.bar{
+  height:12px;
+  background:var(--line);
+  border-radius:8px;
+  overflow:hidden;
+}
+
+.bar>span{
+  display:block;
+  height:100%;
+  background:linear-gradient(90deg,var(--coral),var(--mustard));
+  border-radius:8px;
+  transition:width .5s;
+}
+
+.recent{
+  font-size:12px;
+  color:var(--ink-soft);
+  font-weight:600;
+}
+
+.nav{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  background:var(--card);
+  border-top:2px solid var(--line);
+  display:flex;
+  justify-content:space-around;
+  padding:8px 4px calc(8px + env(safe-area-inset-bottom,0px));
+  z-index:20;
+}
+
+.nav button{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  font-size:10px;
+  font-weight:700;
+  gap:3px;
+  color:var(--ink-soft);
+  padding:4px 8px;
+  border-radius:10px;
+}
+
+.nav button.active{
+  color:var(--pine-deep);
+  background:#E7F2EE;
+}
+
+.nav .ic{
+  font-size:19px;
+}
+
+.modal-bg{
+  position:fixed;
+  inset:0;
+  background:rgba(32,28,24,.5);
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  z-index:50;
+}
+
+.modal{
+  background:var(--card);
+  border-radius:24px 24px 0 0;
+  padding:22px 18px calc(24px + env(safe-area-inset-bottom,0px));
+  width:100%;
+  max-width:520px;
+  max-height:88vh;
+  overflow-y:auto;
+  animation:up .25s ease;
+}
+
+@keyframes up{
+  from{
+    transform:translateY(30px);
+    opacity:0;
+  }
+  to{
+    transform:translateY(0);
+    opacity:1;
+  }
+}
+
+@media(min-width:680px){
+  .modal-bg{
+    align-items:center;
+  }
+
+  .modal{
+    border-radius:24px;
+  }
+}
+
+label{
+  font-size:13px;
+  font-weight:700;
+  color:var(--ink-soft);
+  display:block;
+  margin:12px 0 5px;
+}
+
+input,select,textarea{
+  width:100%;
+  padding:11px 13px;
+  border-radius:12px;
+  border:2px solid var(--line);
+  background:var(--bg);
+  color:var(--ink);
+  font-family:inherit;
+  font-weight:600;
+  font-size:15px;
+}
+
+.chiprow{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+
+.chip{
+  padding:8px 12px;
+  border-radius:12px;
+  border:2px solid var(--line);
+  font-size:14px;
+  background:var(--bg);
+  font-weight:700;
+  color:var(--ink);
+}
+
+.chip.sel{
+  border-color:var(--coral);
+  background:#FFE4DC;
+  color:var(--coral-deep);
+}
+
+.emoji-pick{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+
+.emoji-pick button{
+  font-size:22px;
+  padding:8px;
+  border-radius:12px;
+  background:var(--bg);
+  border:2px solid transparent;
+}
+
+.emoji-pick button.sel{
+  border-color:var(--coral);
+}
+
+.color-pick{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+
+.color-dot{
+  width:32px;
+  height:32px;
+  border-radius:50%;
+  border:3px solid transparent;
+}
+
+.color-dot.sel{
+  border-color:var(--ink);
+}
+
+.section-title{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-bottom:12px;
+}
+
+.pill{
+  font-size:12px;
+  background:var(--mustard);
+  color:#5c3d00;
+  padding:3px 10px;
+  border-radius:20px;
+  font-weight:800;
+}
+
+.empty{
+  text-align:center;
+  color:var(--ink-soft);
+  padding:30px 10px;
+  font-weight:700;
+}
+
+.acc-item{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:10px 0;
+  border-bottom:2px solid var(--line);
+}
+
+.acc-item:last-child{
+  border-bottom:none;
+}
+
+.badge{
+  display:inline-flex;
+  flex-direction:column;
+  align-items:center;
+  gap:4px;
+  width:76px;
+  font-size:11px;
+  font-weight:700;
+  text-align:center;
+  opacity:.32;
+}
+
+.badge.on{
+  opacity:1;
+}
+
+.badge .ic{
+  font-size:26px;
+}
+
+.week-row{
+  display:flex;
+  justify-content:space-between;
+  padding:12px 0;
+  border-bottom:2px solid var(--line);
+  cursor:pointer;
+}
+
+.week-row:last-child{
+  border-bottom:none;
+}
+
+.toast{
+  position:fixed;
+  top:calc(16px + env(safe-area-inset-top,0px));
+  left:50%;
+  transform:translateX(-50%);
+  background:var(--ink);
+  color:var(--bg);
+  padding:10px 18px;
+  border-radius:14px;
+  font-weight:700;
+  font-size:14px;
+  z-index:80;
+  animation:pop .3s ease;
+}
+
+@keyframes pop{
+  from{
+    opacity:0;
+    transform:translate(-50%,-10px);
+  }
+  to{
+    opacity:1;
+    transform:translate(-50%,0);
+  }
+}
+
+.prize-card{
+  border:2px solid var(--line);
+  border-radius:16px;
+  padding:14px;
+  margin-bottom:10px;
+  font-weight:700;
+}
+
+.setup-wrap{
+  max-width:480px;
+  margin:40px auto;
+  padding:0 16px;
+}
+
+.switch-row{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:12px;
+  border-radius:16px;
+  border:2px solid var(--line);
+  margin-bottom:10px;
+  cursor:pointer;
+}
+
+.switch-row:active{
+  background:var(--bg);
+}
+
+.whoami{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-size:13px;
+  font-weight:700;
+  color:#fff;
+  background:rgba(255,255,255,.15);
+  padding:6px 10px;
+  border-radius:20px;
+}
+
+.whoami .avatar{
+  width:26px;
+  height:26px;
+  font-size:14px;
+  border-width:2px;
+}
+
+.lock{
+  font-size:12px;
+  color:var(--ink-soft);
+  font-weight:700;
+}
+
+.admin-tag{
+  background:var(--mustard);
+  color:#5c3d00;
+  font-size:10px;
+  font-weight:800;
+  padding:2px 7px;
+  border-radius:8px;
+}
+
+.step-dots{
+  display:flex;
+  gap:6px;
+  justify-content:center;
+  margin:16px 0;
+}
+
+.step-dots span{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:var(--line);
+}
+
+.step-dots span.on{
+  background:var(--coral);
+}
+
+::-webkit-scrollbar{
+  width:6px;
+}
+
+::-webkit-scrollbar-thumb{
+  background:var(--line);
+  border-radius:6px;
+}
 </style>
 </head>
+
 <body>
+
 <div id="root"></div>
+
+<!-- FIREBASE -->
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
-  import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
-  import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyDT0OvRdTjwz5of3Mdi2LzU8yZszf8b9L4",
-    authDomain: "family-board-d5fd2.firebaseapp.com",
-    projectId: "family-board-d5fd2",
-    storageBucket: "family-board-d5fd2.firebasestorage.app",
-    messagingSenderId: "138120603198",
-    appId: "1:138120603198:web:111c48369098902e5cd36f"
-  };
+import { initializeApp } from
+"https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
-  window.firebaseApp = app;
-  window.firebaseAuth = auth;
-  window.firebaseDb = db;
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged
+} from
+"https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
 
-  // Bridges for the classic <script> below (which can't use ES imports directly).
-  window.fbSignIn = (email, password) => signInWithEmailAndPassword(auth, email, password);
-  window.fbSignOut = () => signOut(auth);
-  window.fbGetProfile = async (uid) => {
-    const snap = await getDoc(doc(db, "members", uid));
-    return snap.exists() ? snap.data() : null;
-  };
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc
+} from
+"https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
 
-  // Fires on load (session restore) and on every login/logout.
-  onAuthStateChanged(auth, (user) => {
-    if (window.__onAuthChange) window.__onAuthChange(user);
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDT0OvRdTjwz5of3Mdi2LzU8yZszf8b9L4",
+  authDomain: "family-board-d5fd2.firebaseapp.com",
+  projectId: "family-board-d5fd2",
+  storageBucket: "family-board-d5fd2.firebasestorage.app",
+  messagingSenderId: "138120603198",
+  appId: "1:138120603198:web:111c48369098902e5cd36f"
+};
+
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+window.firebaseApp = app;
+window.firebaseAuth = auth;
+window.firebaseDb = db;
+
+
+/* LOGIN */
+window.fbSignIn = (email, password) =>
+  signInWithEmailAndPassword(auth, email, password);
+
+
+/* SIGNUP */
+window.fbSignUp = (email, password) =>
+  createUserWithEmailAndPassword(auth, email, password);
+
+
+/* CREATE MEMBER PROFILE */
+window.fbCreateProfile = async (uid, profile) => {
+
+  await setDoc(doc(db, "members", uid), {
+    name: profile.name,
+    emoji: profile.emoji,
+    color: profile.color,
+
+    /*
+      IMPORTANT:
+      Every account created through the signup page
+      is ALWAYS a normal member.
+    */
+    role: "member",
+
+    savedPoints: 0,
+    goalPrizeId: null
   });
+
+};
+
+
+/* LOGOUT */
+window.fbSignOut = () =>
+  signOut(auth);
+
+
+/* LOAD PROFILE */
+window.fbGetProfile = async (uid) => {
+
+  const snap = await getDoc(
+    doc(db, "members", uid)
+  );
+
+  return snap.exists()
+    ? snap.data()
+    : null;
+};
+
+
+/* AUTH STATE */
+onAuthStateChanged(auth, (user) => {
+
+  if(window.__onAuthChange){
+    window.__onAuthChange(user);
+  }
+
+});
+
 </script>
+
+
+<!-- MAIN APP -->
 <script>
-const AVATARS=['🦊','🐻','🐱','🐼','🦁','🐨','🐰','🦄','🐸','🐯','🦖','🐧'];
-const COLORS=['#FFB4A2','#FFD97D','#9BE3C6','#A7C7FF','#D8B4FE','#FF9EB5'];
-const CATS=[{k:'study',l:'📚 Studying'},{k:'chores',l:'🧹 Chores'},{k:'exercise',l:'🏃 Exercise'},{k:'reading',l:'📖 Reading'},{k:'projects',l:'💻 Projects'},{k:'creativity',l:'🎨 Creativity'},{k:'other',l:'🌟 Other'}];
-const DEFAULT_POINTS={study:10,chores:10,exercise:10,reading:20,projects:15,creativity:10,other:5};
-const DEFAULT_PRIZES=[{id:'p1',name:'Choose dinner',emoji:'🍕',cost:100},{id:'p2',name:'Movie night',emoji:'🎬',cost:150},{id:'p3',name:'Extra gaming time',emoji:'🎮',cost:200},{id:'p4',name:'Big prize',emoji:'⭐',cost:1000}];
-const ACHV=[{id:'first',ic:'🌟',name:'First Accomplishment',check:m=>m.accomplishments.length>=1},
-  {id:'study10',ic:'📚',name:'Study Star',check:m=>m.accomplishments.filter(a=>a.cat==='study').length>=10},
-  {id:'winner',ic:'🏆',name:'Weekly Winner',check:m=>m.wins>=1},
-  {id:'goal',ic:'🎯',name:'Goal Getter',check:m=>m.redeemed>=1},
-  {id:'streak',ic:'🔥',name:'7 Day Streak',check:m=>m.streak>=7}];
+
+const AVATARS = [
+  '🦊','🐻','🐱','🐼',
+  '🦁','🐨','🐰','🦄',
+  '🐸','🐯','🦖','🐧'
+];
+
+const COLORS = [
+  '#FFB4A2',
+  '#FFD97D',
+  '#9BE3C6',
+  '#A7C7FF',
+  '#D8B4FE',
+  '#FF9EB5'
+];
+
+const CATS = [
+  {k:'study',l:'📚 Studying'},
+  {k:'chores',l:'🧹 Chores'},
+  {k:'exercise',l:'🏃 Exercise'},
+  {k:'reading',l:'📖 Reading'},
+  {k:'projects',l:'💻 Projects'},
+  {k:'creativity',l:'🎨 Creativity'},
+  {k:'other',l:'🌟 Other'}
+];
+
+const DEFAULT_POINTS = {
+  study:10,
+  chores:10,
+  exercise:10,
+  reading:20,
+  projects:15,
+  creativity:10,
+  other:5
+};
+
+const DEFAULT_PRIZES = [
+  {
+    id:'p1',
+    name:'Choose dinner',
+    emoji:'🍕',
+    cost:100
+  },
+  {
+    id:'p2',
+    name:'Movie night',
+    emoji:'🎬',
+    cost:150
+  },
+  {
+    id:'p3',
+    name:'Extra gaming time',
+    emoji:'🎮',
+    cost:200
+  },
+  {
+    id:'p4',
+    name:'Big prize',
+    emoji:'⭐',
+    cost:1000
+  }
+];
+
+const ACHV = [
+  {
+    id:'first',
+    ic:'🌟',
+    name:'First Accomplishment',
+    check:m => m.accomplishments.length >= 1
+  },
+  {
+    id:'study10',
+    ic:'📚',
+    name:'Study Star',
+    check:m =>
+      m.accomplishments.filter(a => a.cat === 'study').length >= 10
+  },
+  {
+    id:'winner',
+    ic:'🏆',
+    name:'Weekly Winner',
+    check:m => m.wins >= 1
+  },
+  {
+    id:'goal',
+    ic:'🎯',
+    name:'Goal Getter',
+    check:m => m.redeemed >= 1
+  },
+  {
+    id:'streak',
+    ic:'🔥',
+    name:'7 Day Streak',
+    check:m => m.streak >= 7
+  }
+];
 
 const FAMILY_NAME = "Alsuhaimi";
 
-function load(){ try{ const r=localStorage.getItem('familyboard_v1'); return r?JSON.parse(r):null; }catch(e){ return null; } }
-function save(s){ try{ const {authUser, authProfile, authLoading, authError, ...persistable} = s; localStorage.setItem('familyboard_v1', JSON.stringify(persistable)); }catch(e){} }
-function uid(){ return Math.random().toString(36).slice(2,9); }
-function weekLabel(d){ const s=new Date(d); return s.toLocaleDateString(undefined,{month:'short',day:'numeric'}); }
-function todayISO(){ return new Date().toISOString().slice(0,10); }
 
-let state = load() || {members:[], prizes:DEFAULT_PRIZES.map(p=>({...p})), points:{...DEFAULT_POINTS}, weekStart:todayISO(), history:[], view:'board', toast:null};
-state.authLoading = true; state.authUser = null; state.authProfile = null; state.authError = null;
-function isAdmin(){ return !!state.authProfile && state.authProfile.role==='organizer'; }
-function canEdit(memberId){ return isAdmin() || (state.authUser && state.authUser.uid===memberId); }
-function currentUser(){ return state.members.find(m=>m.id===(state.authUser&&state.authUser.uid)); }
-function persist(){ save(state); render(); }
-function showToast(t){ state.toast=t; render(); setTimeout(()=>{state.toast=null; render();},2200); }
+function load(){
 
-// Called by the Firebase module script whenever login state changes (including on page load).
+  try{
+
+    const r =
+      localStorage.getItem('familyboard_v1');
+
+    return r ? JSON.parse(r) : null;
+
+  }catch(e){
+
+    return null;
+
+  }
+
+}
+
+
+function save(s){
+
+  try{
+
+    const {
+      authUser,
+      authProfile,
+      authLoading,
+      authError,
+      ...persistable
+    } = s;
+
+    localStorage.setItem(
+      'familyboard_v1',
+      JSON.stringify(persistable)
+    );
+
+  }catch(e){}
+
+}
+
+
+function uid(){
+
+  return Math.random()
+    .toString(36)
+    .slice(2,9);
+
+}
+
+
+function weekLabel(d){
+
+  const s = new Date(d);
+
+  return s.toLocaleDateString(
+    undefined,
+    {
+      month:'short',
+      day:'numeric'
+    }
+  );
+
+}
+
+
+function todayISO(){
+
+  return new Date()
+    .toISOString()
+    .slice(0,10);
+
+}
+
+
+let state = load() || {
+
+  members:[],
+
+  prizes:
+    DEFAULT_PRIZES.map(
+      p => ({...p})
+    ),
+
+  points:{
+    ...DEFAULT_POINTS
+  },
+
+  weekStart:todayISO(),
+
+  history:[],
+
+  view:'board',
+
+  toast:null
+
+};
+
+
+state.authLoading = true;
+state.authUser = null;
+state.authProfile = null;
+state.authError = null;
+
+
+function isAdmin(){
+
+  return !!state.authProfile &&
+    state.authProfile.role === 'organizer';
+
+}
+
+
+function canEdit(memberId){
+
+  return isAdmin() ||
+    (
+      state.authUser &&
+      state.authUser.uid === memberId
+    );
+
+}
+
+
+function currentUser(){
+
+  return state.members.find(
+    m =>
+      m.id ===
+      (
+        state.authUser &&
+        state.authUser.uid
+      )
+  );
+
+}
+
+
+function persist(){
+
+  save(state);
+  render();
+
+}
+
+
+function showToast(t){
+
+  state.toast = t;
+
+  render();
+
+  setTimeout(
+    () => {
+      state.toast = null;
+      render();
+    },
+    2200
+  );
+
+}
+
+
+/*
+  Firebase login state listener
+*/
 window.__onAuthChange = async function(user){
+
   state.authUser = user;
   state.authProfile = null;
   state.authError = null;
+
   if(user){
+
     try{
-      const profile = await window.fbGetProfile(user.uid);
+
+      const profile =
+        await window.fbGetProfile(user.uid);
+
       if(profile){
+
         state.authProfile = profile;
-        // Firestore is the source of truth for identity/role; merge it into the local member record.
-        let m = state.members.find(x=>x.id===user.uid);
-        if(!m){ m = {id:user.uid, accomplishments:[], achv:[], wins:0, redeemed:0, goalId:profile.goalPrizeId||null}; state.members.push(m); }
-        m.name = profile.name; m.emoji = profile.emoji; m.color = profile.color; m.role = profile.role; m.saved = profile.savedPoints||0;
+
+        let m =
+          state.members.find(
+            x => x.id === user.uid
+          );
+
+        if(!m){
+
+          m = {
+            id:user.uid,
+            accomplishments:[],
+            achv:[],
+            wins:0,
+            redeemed:0,
+            goalId:profile.goalPrizeId || null
+          };
+
+          state.members.push(m);
+
+        }
+
+        m.name = profile.name;
+        m.emoji = profile.emoji;
+        m.color = profile.color;
+        m.role = profile.role;
+        m.saved = profile.savedPoints || 0;
+
       }
-    }catch(e){ state.authError = 'Could not load your profile. Try refreshing.'; }
+
+    }catch(e){
+
+      console.error(e);
+
+      state.authError =
+        'Could not load your profile. Try refreshing.';
+
+    }
+
   }
+
   state.authLoading = false;
+
   state.view = 'board';
+
   persist();
+
 };
 
-function weeklyPoints(m){ return m.accomplishments.filter(a=>a.week===state.weekStart).reduce((s,a)=>s+a.pts,0); }
-function weeklyCount(m){ return m.accomplishments.filter(a=>a.week===state.weekStart).length; }
-function maxWeekly(){ return Math.max(1,...state.members.map(weeklyPoints)); }
+
+function weeklyPoints(m){
+
+  return m.accomplishments
+    .filter(
+      a => a.week === state.weekStart
+    )
+    .reduce(
+      (s,a) => s + a.pts,
+      0
+    );
+
+}
+
+
+function weeklyCount(m){
+
+  return m.accomplishments
+    .filter(
+      a => a.week === state.weekStart
+    )
+    .length;
+
+}
+
+
+function maxWeekly(){
+
+  return Math.max(
+    1,
+    ...state.members.map(weeklyPoints)
+  );
+
+}
+
 
 function checkAchievements(m){
+
   m.achv = m.achv || [];
-  ACHV.forEach(a=>{ if(!m.achv.includes(a.id) && a.check(m)) m.achv.push(a.id); });
+
+  ACHV.forEach(a => {
+
+    if(
+      !m.achv.includes(a.id) &&
+      a.check(m)
+    ){
+
+      m.achv.push(a.id);
+
+    }
+
+  });
+
 }
 
-function addAccomplishment(memberId, data){
-  const m = state.members.find(x=>x.id===memberId);
-  const pts = state.points[data.cat] ?? 5;
-  m.accomplishments.unshift({id:uid(), text:data.text, cat:data.cat, date:data.date, desc:data.desc, pts, week:state.weekStart});
+
+function addAccomplishment(memberId,data){
+
+  const m =
+    state.members.find(
+      x => x.id === memberId
+    );
+
+  if(!m) return;
+
+  const pts =
+    state.points[data.cat] ?? 5;
+
+  m.accomplishments.unshift({
+
+    id:uid(),
+
+    text:data.text,
+
+    cat:data.cat,
+
+    date:data.date,
+
+    desc:data.desc,
+
+    pts,
+
+    week:state.weekStart
+
+  });
+
   checkAchievements(m);
+
   showToast(`+${pts} points! 🎉`);
+
 }
+
 
 function endWeek(){
-  const results = state.members.map(m=>({id:m.id,name:m.name,pts:weeklyPoints(m),emoji:m.emoji,color:m.color}));
-  results.sort((a,b)=>b.pts-a.pts);
-  const winnerId = results[0]?.id;
-  if(winnerId){ const w=state.members.find(x=>x.id===winnerId); w.wins=(w.wins||0)+1; checkAchievements(w); }
-  state.members.forEach(m=>{ m.saved=(m.saved||0)+weeklyPoints(m); });
-  state.history.unshift({weekStart:state.weekStart, weekEnd:todayISO(), results, winnerId});
-  state.weekStart = todayISO();
+
+  const results =
+    state.members.map(
+      m => ({
+        id:m.id,
+        name:m.name,
+        pts:weeklyPoints(m),
+        emoji:m.emoji,
+        color:m.color
+      })
+    );
+
+  results.sort(
+    (a,b) => b.pts - a.pts
+  );
+
+  const winnerId =
+    results[0]?.id;
+
+  if(winnerId){
+
+    const w =
+      state.members.find(
+        x => x.id === winnerId
+      );
+
+    w.wins =
+      (w.wins || 0) + 1;
+
+    checkAchievements(w);
+
+  }
+
+  state.members.forEach(m => {
+
+    m.saved =
+      (m.saved || 0) +
+      weeklyPoints(m);
+
+  });
+
+  state.history.unshift({
+
+    weekStart:state.weekStart,
+
+    weekEnd:todayISO(),
+
+    results,
+
+    winnerId
+
+  });
+
+  state.weekStart =
+    todayISO();
+
   persist();
+
 }
 
-function root(){ return document.getElementById('root'); }
+
+function root(){
+
+  return document.getElementById('root');
+
+}
+
 
 function render(){
+
   const r = root();
-  if(state.authLoading){ r.innerHTML = `<div class="setup-wrap"><div class="card" style="text-align:center">Loading…</div></div>`; return; }
-  if(!state.authUser){ r.innerHTML = loginHTML(); bindLogin(); return; }
-  if(!state.authProfile){ r.innerHTML = notSetUpHTML(); bindNotSetUp(); return; }
-  if(state.view==='settings' && !isAdmin()) state.view='board';
-  r.innerHTML = `<div class="app">${topbar()}${viewFor(state.view)}</div>${nav()}${modalHTML()}${state.toast?`<div class="toast">${state.toast}</div>`:''}`;
+
+  if(state.authLoading){
+
+    r.innerHTML = `
+      <div class="setup-wrap">
+        <div class="card" style="text-align:center">
+          Loading…
+        </div>
+      </div>
+    `;
+
+    return;
+
+  }
+
+
+  if(!state.authUser){
+
+    if(state.view === 'signup'){
+
+      r.innerHTML = signupHTML();
+
+      bindSignup();
+
+    }else{
+
+      r.innerHTML = loginHTML();
+
+      bindLogin();
+
+    }
+
+    return;
+
+  }
+
+
+  if(!state.authProfile){
+
+    r.innerHTML = notSetUpHTML();
+
+    bindNotSetUp();
+
+    return;
+
+  }
+
+
+  if(
+    state.view === 'settings' &&
+    !isAdmin()
+  ){
+
+    state.view = 'board';
+
+  }
+
+
+  r.innerHTML = `
+    <div class="app">
+      ${topbar()}
+      ${viewFor(state.view)}
+    </div>
+
+    ${nav()}
+
+    ${modalHTML()}
+
+    ${
+      state.toast
+      ?
+      `<div class="toast">${state.toast}</div>`
+      :
+      ''
+    }
+  `;
+
   bindGlobal();
+
 }
+
+
+/* LOGIN SCREEN */
 
 function loginHTML(){
-  return `<div class="setup-wrap"><div class="card">
-  <h2 style="text-align:center">🏡 ${FAMILY_NAME} Family Board</h2>
-  <p style="text-align:center;color:var(--ink-soft);font-size:13px;margin:4px 0 14px">Log in with your family account.</p>
-  <label>Email</label><input id="li-email" type="email" placeholder="you@example.com">
-  <label>Password</label><input id="li-pass" type="password" placeholder="Password">
-  <div id="li-err" style="color:var(--coral-deep);font-size:13px;margin-top:8px"></div>
-  <div style="margin-top:16px"><button class="btn" data-login="1" style="width:100%;justify-content:center">Log in</button></div>
-  </div></div>`;
+
+  return `
+    <div class="setup-wrap">
+
+      <div class="card">
+
+        <h2 style="text-align:center">
+          🏡 ${FAMILY_NAME} Family Board
+        </h2>
+
+        <p style="
+          text-align:center;
+          color:var(--ink-soft);
+          font-size:13px;
+          margin:4px 0 14px
+        ">
+          Log in with your family account.
+        </p>
+
+        <label>Email</label>
+
+        <input
+          id="li-email"
+          type="email"
+          placeholder="you@example.com"
+        >
+
+        <label>Password</label>
+
+        <input
+          id="li-pass"
+          type="password"
+          placeholder="Password"
+        >
+
+        <div
+          id="li-err"
+          style="
+            color:var(--coral-deep);
+            font-size:13px;
+            margin-top:8px
+          "
+        ></div>
+
+        <div style="margin-top:16px">
+
+          <button
+            class="btn"
+            data-login="1"
+            style="
+              width:100%;
+              justify-content:center
+            "
+          >
+            Log in
+          </button>
+
+        </div>
+
+
+        <div style="
+          text-align:center;
+          margin-top:16px
+        ">
+
+          <span style="
+            font-size:13px;
+            color:var(--ink-soft)
+          ">
+            New family member?
+          </span>
+
+          <button
+            class="btn ghost small"
+            data-signup="1"
+            style="margin-left:5px"
+          >
+            Create account
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+  `;
+
 }
+
+
+/* SIGNUP SCREEN */
+
+function signupHTML(){
+
+  return `
+    <div class="setup-wrap">
+
+      <div class="card">
+
+        <h2 style="text-align:center">
+          🏡 Create Your Account
+        </h2>
+
+        <p style="
+          text-align:center;
+          color:var(--ink-soft);
+          font-size:13px;
+          margin:4px 0 14px
+        ">
+          Join the ${FAMILY_NAME} Family Board.
+        </p>
+
+
+        <label>Name</label>
+
+        <input
+          id="su-name"
+          type="text"
+          placeholder="Your name"
+        >
+
+
+        <label>Email</label>
+
+        <input
+          id="su-email"
+          type="email"
+          placeholder="you@example.com"
+        >
+
+
+        <label>Password</label>
+
+        <input
+          id="su-pass"
+          type="password"
+          placeholder="Create a password"
+        >
+
+
+        <label>Character</label>
+
+        <div
+          class="emoji-pick"
+          id="su-emoji"
+        >
+
+          ${
+            AVATARS.map(
+              (e,i) =>
+              `
+                <button
+                  type="button"
+                  class="${i===0?'sel':''}"
+                  data-e="${e}"
+                >
+                  ${e}
+                </button>
+              `
+            ).join('')
+          }
+
+        </div>
+
+
+        <label>Color</label>
+
+        <div
+          class="color-pick"
+          id="su-color"
+        >
+
+          ${
+            COLORS.map(
+              (c,i) =>
+              `
+                <button
+                  type="button"
+                  class="color-dot ${i===0?'sel':''}"
+                  data-c="${c}"
+                  style="background:${c}"
+                ></button>
+              `
+            ).join('')
+          }
+
+        </div>
+
+
+        <div
+          id="su-err"
+          style="
+            color:var(--coral-deep);
+            font-size:13px;
+            margin-top:8px
+          "
+        ></div>
+
+
+        <div style="
+          margin-top:16px;
+          display:flex;
+          gap:10px
+        ">
+
+          <button
+            class="btn"
+            data-create-account="1"
+          >
+            Create account
+          </button>
+
+          <button
+            class="btn ghost"
+            data-back-login="1"
+          >
+            Back
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+  `;
+
+}
+
+
 function bindLogin(){
-  const q=s=>document.querySelector(s);
-  const doLogin=async()=>{
-    q('#li-err').textContent='';
-    const email=q('#li-email').value.trim(), pass=q('#li-pass').value;
-    if(!email||!pass){ q('#li-err').textContent='Enter your email and password.'; return; }
-    try{ await window.fbSignIn(email,pass); }
-    catch(e){ q('#li-err').textContent='Could not log in — check your email and password.'; }
+
+  const q =
+    s => document.querySelector(s);
+
+
+  const doLogin = async () => {
+
+    q('#li-err').textContent = '';
+
+    const email =
+      q('#li-email').value.trim();
+
+    const pass =
+      q('#li-pass').value;
+
+
+    if(!email || !pass){
+
+      q('#li-err').textContent =
+        'Enter your email and password.';
+
+      return;
+
+    }
+
+
+    try{
+
+      await window.fbSignIn(
+        email,
+        pass
+      );
+
+    }catch(e){
+
+      console.error(e);
+
+      q('#li-err').textContent =
+        'Could not log in — check your email and password.';
+
+    }
+
   };
-  q('[data-login]').onclick=doLogin;
-  q('#li-pass').addEventListener('keydown',e=>{ if(e.key==='Enter') doLogin(); });
+
+
+  q('[data-login]').onclick =
+    doLogin;
+
+
+  q('[data-signup]').onclick = () => {
+
+    state.view = 'signup';
+
+    render();
+
+  };
+
+
+  q('#li-pass').addEventListener(
+    'keydown',
+    e => {
+
+      if(e.key === 'Enter'){
+        doLogin();
+      }
+
+    }
+  );
+
 }
+
+
+/* SIGNUP BINDINGS */
+
+function bindSignup(){
+
+  const q =
+    s => document.querySelector(s);
+
+  const qa =
+    s => [...document.querySelectorAll(s)];
+
+
+  /* CHARACTER PICKER */
+
+  qa('#su-emoji button').forEach(b => {
+
+    b.onclick = () => {
+
+      qa('#su-emoji button')
+        .forEach(
+          x => x.classList.remove('sel')
+        );
+
+      b.classList.add('sel');
+
+    };
+
+  });
+
+
+  /* COLOR PICKER */
+
+  qa('#su-color button').forEach(b => {
+
+    b.onclick = () => {
+
+      qa('#su-color button')
+        .forEach(
+          x => x.classList.remove('sel')
+        );
+
+      b.classList.add('sel');
+
+    };
+
+  });
+
+
+  /* BACK TO LOGIN */
+
+  q('[data-back-login]').onclick = () => {
+
+    state.view = 'login';
+
+    render();
+
+  };
+
+
+  /* CREATE ACCOUNT */
+
+  q('[data-create-account]').onclick =
+    async () => {
+
+      const name =
+        q('#su-name').value.trim();
+
+      const email =
+        q('#su-email').value.trim();
+
+      const password =
+        q('#su-pass').value;
+
+
+      const emoji =
+        (q('#su-emoji .sel') || {})
+          .dataset?.e || AVATARS[0];
+
+
+      const color =
+        (q('#su-color .sel') || {})
+          .dataset?.c || COLORS[0];
+
+
+      q('#su-err').textContent = '';
+
+
+      if(!name || !email || !password){
+
+        q('#su-err').textContent =
+          'Please fill in your name, email, and password.';
+
+        return;
+
+      }
+
+
+      if(password.length < 6){
+
+        q('#su-err').textContent =
+          'Password must be at least 6 characters.';
+
+        return;
+
+      }
+
+
+      try{
+
+        const credential =
+          await window.fbSignUp(
+            email,
+            password
+          );
+
+
+        await window.fbCreateProfile(
+          credential.user.uid,
+          {
+            name,
+            emoji,
+            color
+          }
+        );
+
+
+        /*
+          Firebase automatically triggers
+          onAuthStateChanged after signup.
+        */
+
+      }catch(e){
+
+        console.error(e);
+
+
+        if(
+          e.code ===
+          'auth/email-already-in-use'
+        ){
+
+          q('#su-err').textContent =
+            'This email is already registered.';
+
+        }else if(
+          e.code ===
+          'auth/invalid-email'
+        ){
+
+          q('#su-err').textContent =
+            'Please enter a valid email address.';
+
+        }else if(
+          e.code ===
+          'auth/weak-password'
+        ){
+
+          q('#su-err').textContent =
+            'Please choose a stronger password.';
+
+        }else{
+
+          q('#su-err').textContent =
+            'Could not create the account. Please try again.';
+
+        }
+
+      }
+
+    };
+
+}
+
 
 function notSetUpHTML(){
-  return `<div class="setup-wrap"><div class="card" style="text-align:center">
-  <h2>Almost there 👋</h2>
-  <p style="color:var(--ink-soft);font-size:14px;margin:10px 0">Your login works, but the organizer hasn't set up your family profile yet. Ask them to add you in Family Settings.</p>
-  <button class="btn ghost" data-logout="1">Log out</button>
-  </div></div>`;
+
+  return `
+    <div class="setup-wrap">
+
+      <div
+        class="card"
+        style="text-align:center"
+      >
+
+        <h2>
+          Almost there 👋
+        </h2>
+
+        <p style="
+          color:var(--ink-soft);
+          font-size:14px;
+          margin:10px 0
+        ">
+          Your login works, but the organizer hasn't
+          set up your family profile yet.
+          Ask them to add you in Family Settings.
+        </p>
+
+        <button
+          class="btn ghost"
+          data-logout="1"
+        >
+          Log out
+        </button>
+
+      </div>
+
+    </div>
+  `;
+
 }
-function bindNotSetUp(){ document.querySelector('[data-logout]').onclick=()=>window.fbSignOut(); }
+
+
+function bindNotSetUp(){
+
+  document
+    .querySelector('[data-logout]')
+    .onclick =
+    () => window.fbSignOut();
+
+}
+
 
 function topbar(){
-  const u=currentUser();
-  return `<div class="topbar"><div class="fam">🏡 ${esc(FAMILY_NAME)}</div>
-  <div style="display:flex;align-items:center;gap:8px">
-    <div class="whoami">${u?`<div class="avatar" style="background:${u.color}">${u.emoji}</div>${esc(u.name)}${isAdmin()?' <span class="admin-tag">Organizer</span>':''}`:''}</div>
-    <button class="btn small ghost" data-logout="1">Log out</button>
-  </div></div>`;
+
+  const u =
+    currentUser();
+
+  return `
+    <div class="topbar">
+
+      <div class="fam">
+        🏡 ${esc(FAMILY_NAME)}
+      </div>
+
+      <div style="
+        display:flex;
+        align-items:center;
+        gap:8px
+      ">
+
+        <div class="whoami">
+
+          ${
+            u
+            ?
+            `
+              <div
+                class="avatar"
+                style="background:${u.color}"
+              >
+                ${u.emoji}
+              </div>
+
+              ${esc(u.name)}
+
+              ${
+                isAdmin()
+                ?
+                ' <span class="admin-tag">Organizer</span>'
+                :
+                ''
+              }
+            `
+            :
+            ''
+          }
+
+        </div>
+
+        <button
+          class="btn small ghost"
+          data-logout="1"
+        >
+          Log out
+        </button>
+
+      </div>
+
+    </div>
+  `;
+
 }
+
 
 function nav(){
-  let items=[['board','🏠','Board'],['progress','📋','Progress'],['leaderboard','🏆','Leaders'],['vault','🎁','Vault'],['history','📅','History'],['settings','⚙️','Settings']];
-  if(!isAdmin()) items=items.filter(i=>i[0]!=='settings');
-  return `<div class="nav">${items.map(([v,ic,l])=>`<button data-nav="${v}" class="${state.view===v?'active':''}"><span class="ic">${ic}</span>${l}</button>`).join('')}</div>`;
+
+  let items = [
+    ['board','🏠','Board'],
+    ['progress','📋','Progress'],
+    ['leaderboard','🏆','Leaders'],
+    ['vault','🎁','Vault'],
+    ['history','📅','History'],
+    ['settings','⚙️','Settings']
+  ];
+
+
+  if(!isAdmin()){
+
+    items =
+      items.filter(
+        i => i[0] !== 'settings'
+      );
+
+  }
+
+
+  return `
+    <div class="nav">
+
+      ${
+        items.map(
+          ([v,ic,l]) =>
+          `
+            <button
+              data-nav="${v}"
+              class="${state.view===v?'active':''}"
+            >
+              <span class="ic">${ic}</span>
+              ${l}
+            </button>
+          `
+        ).join('')
+      }
+
+    </div>
+  `;
+
 }
+
 
 function viewFor(v){
-  if(v==='board') return boardView();
-  if(v==='progress') return progressView();
-  if(v==='leaderboard') return leaderboardView();
-  if(v==='vault') return vaultView();
-  if(v==='history') return historyView();
-  if(v==='settings') return settingsView();
-  if(v==='profile') return profileView(state.activeMember);
+
+  if(v === 'board')
+    return boardView();
+
+  if(v === 'progress')
+    return progressView();
+
+  if(v === 'leaderboard')
+    return leaderboardView();
+
+  if(v === 'vault')
+    return vaultView();
+
+  if(v === 'history')
+    return historyView();
+
+  if(v === 'settings')
+    return settingsView();
+
+  if(v === 'profile')
+    return profileView(state.activeMember);
+
   return boardView();
+
 }
+
 
 function memberCard(m){
-  const wp=weeklyPoints(m), pct=Math.min(100,Math.round(wp/maxWeekly()*100));
-  const recent = m.accomplishments.filter(a=>a.week===state.weekStart)[0];
-  return `<div class="member-card" data-open="${m.id}">
-    <div class="mc-banner" style="background:${m.color}"></div>
-    <div class="mc-head"><div class="avatar" style="background:${m.color}">${m.emoji}</div>
-      <div><div class="mc-name">${esc(m.name)}</div><div class="mc-pts">${wp} pts this week</div></div></div>
-    <div class="bar"><span style="width:${pct}%"></span></div>
-    <div class="recent">${weeklyCount(m)} accomplishment${weeklyCount(m)===1?'':'s'}${recent?` · ${esc(recent.text)}`:''}</div>
-  </div>`;
+
+  const wp =
+    weeklyPoints(m);
+
+  const pct =
+    Math.min(
+      100,
+      Math.round(
+        wp / maxWeekly() * 100
+      )
+    );
+
+
+  const recent =
+    m.accomplishments
+      .filter(
+        a => a.week === state.weekStart
+      )[0];
+
+
+  return `
+    <div
+      class="member-card"
+      data-open="${m.id}"
+    >
+
+      <div
+        class="mc-banner"
+        style="background:${m.color}"
+      ></div>
+
+      <div class="mc-head">
+
+        <div
+          class="avatar"
+          style="background:${m.color}"
+        >
+          ${m.emoji}
+        </div>
+
+        <div>
+
+          <div class="mc-name">
+            ${esc(m.name)}
+          </div>
+
+          <div class="mc-pts">
+            ${wp} pts this week
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="bar">
+        <span style="width:${pct}%"></span>
+      </div>
+
+      <div class="recent">
+
+        ${weeklyCount(m)}
+        accomplishment${weeklyCount(m)===1?'':'s'}
+
+        ${
+          recent
+          ?
+          ` · ${esc(recent.text)}`
+          :
+          ''
+        }
+
+      </div>
+
+    </div>
+  `;
+
 }
+
 
 function boardView(){
-  const has = state.members.length>0;
-  return `<div class="card" style="text-align:center;background:var(--pine);border-color:var(--pine-deep);color:#fff">
-    <h2 style="font-size:19px;color:#fff">🏆 This Week's Challenge</h2>
-    <div style="font-size:13px;color:#DCEDE7;margin-top:4px;font-weight:600">Log what you did — every bit counts!</div>
-  </div>
-  <div class="grid">${has?state.members.map(memberCard).join(''):`<div class="empty">No family members yet. Add some in Settings!</div>`}</div>
-  <div style="text-align:center;margin-top:18px"><button class="btn" data-add-acc="1" ${isAdmin()?'':`data-member="${state.authUser.uid}"`}>+ Add Accomplishment</button></div>`;
+
+  const has =
+    state.members.length > 0;
+
+
+  return `
+    <div
+      class="card"
+      style="
+        text-align:center;
+        background:var(--pine);
+        border-color:var(--pine-deep);
+        color:#fff
+      "
+    >
+
+      <h2
+        style="
+          font-size:19px;
+          color:#fff
+        "
+      >
+        🏆 This Week's Challenge
+      </h2>
+
+      <div style="
+        font-size:13px;
+        color:#DCEDE7;
+        margin-top:4px;
+        font-weight:600
+      ">
+        Log what you did — every bit counts!
+      </div>
+
+    </div>
+
+
+    <div class="grid">
+
+      ${
+        has
+        ?
+        state.members
+          .map(memberCard)
+          .join('')
+        :
+        `
+          <div class="empty">
+            No family members yet.
+            Add some in Settings!
+          </div>
+        `
+      }
+
+    </div>
+
+
+    <div style="
+      text-align:center;
+      margin-top:18px
+    ">
+
+      <button
+        class="btn"
+        data-add-acc="1"
+        ${
+          isAdmin()
+          ?
+          ''
+          :
+          `data-member="${state.authUser.uid}"`
+        }
+      >
+        + Add Accomplishment
+      </button>
+
+    </div>
+  `;
+
 }
+
 
 function progressView(){
-  if(!state.members.length) return `<div class="empty">Add a family member first.</div>`;
-  const m = state.activeMember ? state.members.find(x=>x.id===state.activeMember) : currentUser();
+
+  if(!state.members.length){
+
+    return `
+      <div class="empty">
+        Add a family member first.
+      </div>
+    `;
+
+  }
+
+
+  const m =
+    state.activeMember
+    ?
+    state.members.find(
+      x => x.id === state.activeMember
+    )
+    :
+    currentUser();
+
+
+  if(!m){
+
+    return `
+      <div class="empty">
+        No member found.
+      </div>
+    `;
+
+  }
+
+
   return profileView(m.id);
+
 }
+
 
 function profileView(id){
-  const m = state.members.find(x=>x.id===id) || state.members[0];
-  if(!m) return `<div class="empty">No members yet.</div>`;
+
+  const m =
+    state.members.find(
+      x => x.id === id
+    ) ||
+    state.members[0];
+
+
+  if(!m){
+
+    return `
+      <div class="empty">
+        No members yet.
+      </div>
+    `;
+
+  }
+
+
   checkAchievements(m);
-  const weekAcc = m.accomplishments.filter(a=>a.week===state.weekStart);
-  const prevAcc = m.accomplishments.filter(a=>a.week!==state.weekStart).slice(0,8);
-  return `<div class="card">
-    <div class="mc-head"><div class="avatar" style="background:${m.color};width:64px;height:64px;font-size:32px">${m.emoji}</div>
-      <div><h2>${esc(m.name)}</h2><div class="mc-pts">${weeklyPoints(m)} pts this week · ${m.saved||0} saved</div></div></div>
-    ${canEdit(m.id)?`<div class="chiprow" style="margin-top:14px">
-      <button class="btn small" data-add-acc="1" data-member="${m.id}">+ Add Accomplishment</button>
-      <button class="btn small ghost" data-edit-char="${m.id}">Edit Character</button>
-      <button class="btn small ghost" data-nav="vault" data-member="${m.id}">Manage Prize</button>
-    </div>`:`<div class="lock" style="margin-top:10px">🔒 View only — ${esc(m.name)} manages their own entries</div>`}
-  </div>
-  <div class="card"><div class="section-title"><h3>This week</h3><span class="pill">${weekAcc.length}</span></div>
-    ${weekAcc.length?weekAcc.map(a=>accItem(a)).join(''):`<div class="empty">Nothing logged yet this week.</div>`}
-  </div>
-  <div class="card"><h3 style="margin-bottom:10px">Achievements</h3>
-    <div style="display:flex;flex-wrap:wrap;gap:10px">${ACHV.map(a=>`<div class="badge ${((m.achv||[]).includes(a.id))?'on':''}"><span class="ic">${a.ic}</span>${a.name}</div>`).join('')}</div>
-  </div>
-  ${prevAcc.length?`<div class="card"><h3 style="margin-bottom:10px">Earlier</h3>${prevAcc.map(a=>accItem(a)).join('')}</div>`:''}`;
+
+
+  const weekAcc =
+    m.accomplishments.filter(
+      a => a.week === state.weekStart
+    );
+
+
+  const prevAcc =
+    m.accomplishments
+      .filter(
+        a => a.week !== state.weekStart
+      )
+      .slice(0,8);
+
+
+  return `
+    <div class="card">
+
+      <div class="mc-head">
+
+        <div
+          class="avatar"
+          style="
+            background:${m.color};
+            width:64px;
+            height:64px;
+            font-size:32px
+          "
+        >
+          ${m.emoji}
+        </div>
+
+        <div>
+
+          <h2>
+            ${esc(m.name)}
+          </h2>
+
+          <div class="mc-pts">
+            ${weeklyPoints(m)} pts this week
+            · ${m.saved || 0} saved
+          </div>
+
+        </div>
+
+      </div>
+
+
+      ${
+        canEdit(m.id)
+        ?
+        `
+          <div
+            class="chiprow"
+            style="margin-top:14px"
+          >
+
+            <button
+              class="btn small"
+              data-add-acc="1"
+              data-member="${m.id}"
+            >
+              + Add Accomplishment
+            </button>
+
+            <button
+              class="btn small ghost"
+              data-edit-char="${m.id}"
+            >
+              Edit Character
+            </button>
+
+            <button
+              class="btn small ghost"
+              data-nav="vault"
+              data-member="${m.id}"
+            >
+              Manage Prize
+            </button>
+
+          </div>
+        `
+        :
+        `
+          <div
+            class="lock"
+            style="margin-top:10px"
+          >
+            🔒 View only — ${esc(m.name)}
+            manages their own entries
+          </div>
+        `
+      }
+
+    </div>
+
+
+    <div class="card">
+
+      <div class="section-title">
+
+        <h3>
+          This week
+        </h3>
+
+        <span class="pill">
+          ${weekAcc.length}
+        </span>
+
+      </div>
+
+
+      ${
+        weekAcc.length
+        ?
+        weekAcc
+          .map(a => accItem(a))
+          .join('')
+        :
+        `
+          <div class="empty">
+            Nothing logged yet this week.
+          </div>
+        `
+      }
+
+    </div>
+
+
+    <div class="card">
+
+      <h3 style="margin-bottom:10px">
+        Achievements
+      </h3>
+
+      <div style="
+        display:flex;
+        flex-wrap:wrap;
+        gap:10px
+      ">
+
+        ${
+          ACHV.map(
+            a =>
+            `
+              <div
+                class="badge ${
+                  ((m.achv || [])
+                    .includes(a.id))
+                  ?
+                  'on'
+                  :
+                  ''
+                }"
+              >
+
+                <span class="ic">
+                  ${a.ic}
+                </span>
+
+                ${a.name}
+
+              </div>
+            `
+          ).join('')
+        }
+
+      </div>
+
+    </div>
+
+
+    ${
+      prevAcc.length
+      ?
+      `
+        <div class="card">
+
+          <h3 style="margin-bottom:10px">
+            Earlier
+          </h3>
+
+          ${
+            prevAcc
+              .map(a => accItem(a))
+              .join('')
+          }
+
+        </div>
+      `
+      :
+      ''
+    }
+  `;
+
 }
+
 
 function accItem(a){
-  const cat = CATS.find(c=>c.k===a.cat);
-  return `<div class="acc-item"><div><div style="font-weight:700">${esc(a.text)}</div><div style="font-size:12px;color:var(--ink-soft)">${cat?cat.l:''} · ${a.date}</div></div><div style="font-weight:800;color:var(--coral-deep)">+${a.pts}</div></div>`;
+
+  const cat =
+    CATS.find(
+      c => c.k === a.cat
+    );
+
+
+  return `
+    <div class="acc-item">
+
+      <div>
+
+        <div style="font-weight:700">
+          ${esc(a.text)}
+        </div>
+
+        <div style="
+          font-size:12px;
+          color:var(--ink-soft)
+        ">
+          ${cat ? cat.l : ''}
+          · ${a.date}
+        </div>
+
+      </div>
+
+      <div style="
+        font-weight:800;
+        color:var(--coral-deep)
+      ">
+        +${a.pts}
+      </div>
+
+    </div>
+  `;
+
 }
+
 
 function leaderboardView(){
-  const sorted=[...state.members].sort((a,b)=>weeklyPoints(b)-weeklyPoints(a));
-  return `<div class="card"><h2 style="margin-bottom:14px">🏆 Leaderboard — this week</h2>
-  ${sorted.map((m,i)=>`<div class="acc-item"><div class="mc-head"><div style="font-weight:800;width:20px">${i+1}</div><div class="avatar" style="background:${m.color};width:40px;height:40px;font-size:20px">${m.emoji}</div><div style="font-weight:700">${esc(m.name)}</div></div><div style="font-weight:800;color:var(--coral-deep)">${weeklyPoints(m)}</div></div>`).join('')||'<div class="empty">No members yet.</div>'}
-  </div>`;
+
+  const sorted =
+    [...state.members].sort(
+      (a,b) =>
+        weeklyPoints(b) -
+        weeklyPoints(a)
+    );
+
+
+  return `
+    <div class="card">
+
+      <h2 style="margin-bottom:14px">
+        🏆 Leaderboard — this week
+      </h2>
+
+      ${
+        sorted
+          .map(
+            (m,i) =>
+            `
+              <div class="acc-item">
+
+                <div class="mc-head">
+
+                  <div style="
+                    font-weight:800;
+                    width:20px
+                  ">
+                    ${i+1}
+                  </div>
+
+                  <div
+                    class="avatar"
+                    style="
+                      background:${m.color};
+                      width:40px;
+                      height:40px;
+                      font-size:20px
+                    "
+                  >
+                    ${m.emoji}
+                  </div>
+
+                  <div style="font-weight:700">
+                    ${esc(m.name)}
+                  </div>
+
+                </div>
+
+                <div style="
+                  font-weight:800;
+                  color:var(--coral-deep)
+                ">
+                  ${weeklyPoints(m)}
+                </div>
+
+              </div>
+            `
+          )
+          .join('')
+          ||
+          `
+            <div class="empty">
+              No members yet.
+            </div>
+          `
+      }
+
+    </div>
+  `;
+
 }
+
 
 function vaultView(){
-  const m = state.activeMember ? state.members.find(x=>x.id===state.activeMember) : currentUser();
-  if(!m) return `<div class="empty">Add a family member first.</div>`;
-  const goal = state.prizes.find(p=>p.id===m.goalId);
-  return `<div class="card"><h2>🎁 ${esc(m.name)}'s Prize Vault</h2><div class="mc-pts" style="margin-top:4px">${m.saved||0} points saved</div></div>
-  ${goal?`<div class="card"><div class="mc-head"><div style="font-size:26px">${goal.emoji}</div><div><div class="mc-name">${esc(goal.name)}</div><div class="mc-pts">${Math.min(m.saved||0,goal.cost)} / ${goal.cost}</div></div></div>
-    <div class="bar" style="margin-top:10px"><span style="width:${Math.min(100,Math.round((m.saved||0)/goal.cost*100))}%"></span></div>
-    ${(m.saved||0)>=goal.cost?`<div style="margin-top:12px"><div class="pill">🎉 You unlocked this reward!</div>${canEdit(m.id)?`<div style="margin-top:8px"><button class="btn small" data-redeem="${m.id}|${goal.id}">Mark as redeemed</button></div>`:''}</div>`:''}
-  </div>`:''}
-  <div class="card"><h3 style="margin-bottom:10px">Choose a prize to save for</h3>
-  ${state.prizes.map(p=>`<div class="prize-card" style="display:flex;justify-content:space-between;align-items:center"><div>${p.emoji} ${esc(p.name)} — <b>${p.cost}</b> pts</div>${canEdit(m.id)?`<button class="btn small ${m.goalId===p.id?'':'ghost'}" data-set-goal="${m.id}|${p.id}">${m.goalId===p.id?'Current goal':'Choose'}</button>`:''}</div>`).join('')}
-  </div>${canEdit(m.id)?'':'<div class="lock">🔒 View only</div>'}`;
+
+  const m =
+    state.activeMember
+    ?
+    state.members.find(
+      x => x.id === state.activeMember
+    )
+    :
+    currentUser();
+
+
+  if(!m){
+
+    return `
+      <div class="empty">
+        Add a family member first.
+      </div>
+    `;
+
+  }
+
+
+  const goal =
+    state.prizes.find(
+      p => p.id === m.goalId
+    );
+
+
+  return `
+    <div class="card">
+
+      <h2>
+        🎁 ${esc(m.name)}'s Prize Vault
+      </h2>
+
+      <div
+        class="mc-pts"
+        style="margin-top:4px"
+      >
+        ${m.saved || 0} points saved
+      </div>
+
+    </div>
+
+
+    ${
+      goal
+      ?
+      `
+        <div class="card">
+
+          <div class="mc-head">
+
+            <div style="font-size:26px">
+              ${goal.emoji}
+            </div>
+
+            <div>
+
+              <div class="mc-name">
+                ${esc(goal.name)}
+              </div>
+
+              <div class="mc-pts">
+                ${Math.min(
+                  m.saved || 0,
+                  goal.cost
+                )}
+                / ${goal.cost}
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div
+            class="bar"
+            style="margin-top:10px"
+          >
+
+            <span style="
+              width:${
+                Math.min(
+                  100,
+                  Math.round(
+                    (m.saved || 0) /
+                    goal.cost *
+                    100
+                  )
+                )
+              }%
+            "></span>
+
+          </div>
+
+
+          ${
+            (m.saved || 0) >= goal.cost
+            ?
+            `
+              <div style="margin-top:12px">
+
+                <div class="pill">
+                  🎉 You unlocked this reward!
+                </div>
+
+                ${
+                  canEdit(m.id)
+                  ?
+                  `
+                    <div style="margin-top:8px">
+
+                      <button
+                        class="btn small"
+                        data-redeem="${m.id}|${goal.id}"
+                      >
+                        Mark as redeemed
+                      </button>
+
+                    </div>
+                  `
+                  :
+                  ''
+                }
+
+              </div>
+            `
+            :
+            ''
+          }
+
+        </div>
+      `
+      :
+      ''
+    }
+
+
+    <div class="card">
+
+      <h3 style="margin-bottom:10px">
+        Choose a prize to save for
+      </h3>
+
+      ${
+        state.prizes
+          .map(
+            p =>
+            `
+              <div
+                class="prize-card"
+                style="
+                  display:flex;
+                  justify-content:space-between;
+                  align-items:center
+                "
+              >
+
+                <div>
+                  ${p.emoji}
+                  ${esc(p.name)}
+                  —
+                  <b>${p.cost}</b> pts
+                </div>
+
+                ${
+                  canEdit(m.id)
+                  ?
+                  `
+                    <button
+                      class="btn small ${
+                        m.goalId === p.id
+                        ?
+                        ''
+                        :
+                        'ghost'
+                      }"
+                      data-set-goal="${m.id}|${p.id}"
+                    >
+                      ${
+                        m.goalId === p.id
+                        ?
+                        'Current goal'
+                        :
+                        'Choose'
+                      }
+                    </button>
+                  `
+                  :
+                  ''
+                }
+
+              </div>
+            `
+          )
+          .join('')
+      }
+
+    </div>
+
+
+    ${
+      canEdit(m.id)
+      ?
+      ''
+      :
+      `
+        <div class="lock">
+          🔒 View only
+        </div>
+      `
+    }
+  `;
+
 }
+
 
 function historyView(){
-  if(!state.history.length) return `<div class="card"><h2>📅 History</h2><div class="empty">No past weeks yet. End the current week in Settings once it's over.</div></div>`;
-  return `<div class="card"><h2 style="margin-bottom:8px">📅 History</h2>
-  ${state.history.map((w,i)=>`<div class="week-row" data-week="${i}"><div><b>Week of ${weekLabel(w.weekStart)}</b><div style="font-size:12px;color:var(--ink-soft)">🏆 ${esc(w.results.find(r=>r.id===w.winnerId)?.name||'—')}</div></div><div style="color:var(--ink-soft)">›</div></div>`).join('')}
-  </div>${state.openWeek!=null?weekDetail(state.history[state.openWeek]):''}`;
+
+  if(!state.history.length){
+
+    return `
+      <div class="card">
+
+        <h2>
+          📅 History
+        </h2>
+
+        <div class="empty">
+          No past weeks yet.
+          End the current week in Settings
+          once it's over.
+        </div>
+
+      </div>
+    `;
+
+  }
+
+
+  return `
+    <div class="card">
+
+      <h2 style="margin-bottom:8px">
+        📅 History
+      </h2>
+
+      ${
+        state.history
+          .map(
+            (w,i) =>
+            `
+              <div
+                class="week-row"
+                data-week="${i}"
+              >
+
+                <div>
+
+                  <b>
+                    Week of
+                    ${weekLabel(w.weekStart)}
+                  </b>
+
+                  <div style="
+                    font-size:12px;
+                    color:var(--ink-soft)
+                  ">
+                    🏆
+                    ${esc(
+                      w.results.find(
+                        r =>
+                          r.id === w.winnerId
+                      )?.name || '—'
+                    )}
+                  </div>
+
+                </div>
+
+                <div style="color:var(--ink-soft)">
+                  ›
+                </div>
+
+              </div>
+            `
+          )
+          .join('')
+      }
+
+    </div>
+
+    ${
+      state.openWeek != null
+      ?
+      weekDetail(
+        state.history[state.openWeek]
+      )
+      :
+      ''
+    }
+  `;
+
 }
+
 
 function weekDetail(w){
-  return `<div class="card"><h3 style="margin-bottom:10px">Week of ${weekLabel(w.weekStart)}</h3>
-  ${w.results.map(r=>`<div class="acc-item"><div class="mc-head"><div class="avatar" style="background:${r.color};width:36px;height:36px;font-size:18px">${r.emoji}</div>${esc(r.name)}${r.id===w.winnerId?' 🏆':''}</div><b>${r.pts}</b></div>`).join('')}
-  </div>`;
+
+  return `
+    <div class="card">
+
+      <h3 style="margin-bottom:10px">
+        Week of ${weekLabel(w.weekStart)}
+      </h3>
+
+      ${
+        w.results
+          .map(
+            r =>
+            `
+              <div class="acc-item">
+
+                <div class="mc-head">
+
+                  <div
+                    class="avatar"
+                    style="
+                      background:${r.color};
+                      width:36px;
+                      height:36px;
+                      font-size:18px
+                    "
+                  >
+                    ${r.emoji}
+                  </div>
+
+                  ${esc(r.name)}
+
+                  ${
+                    r.id === w.winnerId
+                    ?
+                    ' 🏆'
+                    :
+                    ''
+                  }
+
+                </div>
+
+                <b>
+                  ${r.pts}
+                </b>
+
+              </div>
+            `
+          )
+          .join('')
+      }
+
+    </div>
+  `;
+
 }
+
 
 function settingsView(){
-  return `<div class="card"><h2 style="margin-bottom:14px">⚙️ Family Settings</h2>
-  <div style="font-size:13px;color:var(--ink-soft)">${esc(FAMILY_NAME)} Family Board</div></div>
 
-  <div class="card"><h3 style="margin-bottom:10px">Members</h3>
-  ${state.members.map(m=>`<div class="acc-item"><div class="mc-head"><div class="avatar" style="background:${m.color};width:36px;height:36px;font-size:18px">${m.emoji}</div>${esc(m.name)}</div><button class="btn small ghost" data-remove-member="${m.id}">Remove</button></div>`).join('')||'<div class="empty">No members yet.</div>'}
-  <div style="margin-top:12px"><button class="btn small secondary" data-add-member="1">+ Add member</button></div></div>
+  return `
+    <div class="card">
 
-  <div class="card"><h3 style="margin-bottom:10px">Point values</h3>
-  ${CATS.map(c=>`<div class="acc-item"><div>${c.l}</div><input type="number" style="width:70px" data-point-cat="${c.k}" value="${state.points[c.k]}"></div>`).join('')}
-  </div>
+      <h2 style="margin-bottom:14px">
+        ⚙️ Family Settings
+      </h2>
 
-  <div class="card"><h3 style="margin-bottom:10px">Prizes</h3>
-  ${state.prizes.map(p=>`<div class="acc-item"><div>${p.emoji} ${esc(p.name)} — ${p.cost} pts</div><button class="btn small ghost" data-remove-prize="${p.id}">Remove</button></div>`).join('')}
-  <div style="margin-top:12px"><button class="btn small secondary" data-add-prize="1">+ Add prize</button></div></div>
+      <div style="
+        font-size:13px;
+        color:var(--ink-soft)
+      ">
+        ${esc(FAMILY_NAME)}
+        Family Board
+      </div>
 
-  <div class="card"><h3 style="margin-bottom:10px">Week</h3>
-  <div style="font-size:13px;color:var(--ink-soft);margin-bottom:10px">Current week started ${weekLabel(state.weekStart)}. Ending the week archives everyone's points permanently.</div>
-  <button class="btn" data-end-week="1">🏁 End week & start new one</button></div>`;
+    </div>
+
+
+    <div class="card">
+
+      <h3 style="margin-bottom:10px">
+        Members
+      </h3>
+
+      ${
+        state.members
+          .map(
+            m =>
+            `
+              <div class="acc-item">
+
+                <div class="mc-head">
+
+                  <div
+                    class="avatar"
+                    style="
+                      background:${m.color};
+                      width:36px;
+                      height:36px;
+                      font-size:18px
+                    "
+                  >
+                    ${m.emoji}
+                  </div>
+
+                  ${esc(m.name)}
+
+                </div>
+
+                <button
+                  class="btn small ghost"
+                  data-remove-member="${m.id}"
+                >
+                  Remove
+                </button>
+
+              </div>
+            `
+          )
+          .join('')
+          ||
+          `
+            <div class="empty">
+              No members yet.
+            </div>
+          `
+      }
+
+
+      <div style="margin-top:12px">
+
+        <button
+          class="btn small secondary"
+          data-add-member="1"
+        >
+          + Add member
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <div class="card">
+
+      <h3 style="margin-bottom:10px">
+        Point values
+      </h3>
+
+      ${
+        CATS.map(
+          c =>
+          `
+            <div class="acc-item">
+
+              <div>
+                ${c.l}
+              </div>
+
+              <input
+                type="number"
+                style="width:70px"
+                data-point-cat="${c.k}"
+                value="${state.points[c.k]}"
+              >
+
+            </div>
+          `
+        ).join('')
+      }
+
+    </div>
+
+
+    <div class="card">
+
+      <h3 style="margin-bottom:10px">
+        Prizes
+      </h3>
+
+      ${
+        state.prizes
+          .map(
+            p =>
+            `
+              <div class="acc-item">
+
+                <div>
+                  ${p.emoji}
+                  ${esc(p.name)}
+                  —
+                  ${p.cost} pts
+                </div>
+
+                <button
+                  class="btn small ghost"
+                  data-remove-prize="${p.id}"
+                >
+                  Remove
+                </button>
+
+              </div>
+            `
+          )
+          .join('')
+      }
+
+
+      <div style="margin-top:12px">
+
+        <button
+          class="btn small secondary"
+          data-add-prize="1"
+        >
+          + Add prize
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <div class="card">
+
+      <h3 style="margin-bottom:10px">
+        Week
+      </h3>
+
+      <div style="
+        font-size:13px;
+        color:var(--ink-soft);
+        margin-bottom:10px
+      ">
+        Current week started
+        ${weekLabel(state.weekStart)}.
+        Ending the week archives everyone's
+        points permanently.
+      </div>
+
+      <button
+        class="btn"
+        data-end-week="1"
+      >
+        🏁 End week & start new one
+      </button>
+
+    </div>
+  `;
+
 }
 
-// ---------- Modal ----------
+
+/* MODALS */
+
 function modalHTML(){
-  if(!state.modal) return '';
-  const t=state.modal.type;
-  if(t==='addAcc') return modalWrap(addAccForm());
-  if(t==='addMember') return modalWrap(addMemberForm());
-  if(t==='editChar') return modalWrap(editCharForm());
-  if(t==='addPrize') return modalWrap(addPrizeForm());
+
+  if(!state.modal)
+    return '';
+
+  const t =
+    state.modal.type;
+
+
+  if(t === 'addAcc')
+    return modalWrap(addAccForm());
+
+  if(t === 'addMember')
+    return modalWrap(addMemberForm());
+
+  if(t === 'editChar')
+    return modalWrap(editCharForm());
+
+  if(t === 'addPrize')
+    return modalWrap(addPrizeForm());
+
   return '';
+
 }
-function modalWrap(inner){ return `<div class="modal-bg" data-close-modal="1"><div class="modal" onclick="event.stopPropagation()">${inner}</div></div>`; }
+
+
+function modalWrap(inner){
+
+  return `
+    <div
+      class="modal-bg"
+      data-close-modal="1"
+    >
+
+      <div
+        class="modal"
+        onclick="event.stopPropagation()"
+      >
+        ${inner}
+      </div>
+
+    </div>
+  `;
+
+}
+
 
 function addAccForm(){
-  const myUid = state.authUser.uid;
-  const mid = state.modal.memberId || myUid;
-  const pickable = isAdmin() ? state.members : state.members.filter(m=>m.id===myUid);
-  return `<h3>Add Accomplishment</h3>
-  <label>Who?</label><select id="af-member" ${isAdmin()?'':'disabled'}>${pickable.map(m=>`<option value="${m.id}" ${m.id===mid?'selected':''}>${esc(m.name)}</option>`).join('')}</select>
-  <label>What did you accomplish?</label><input id="af-text" placeholder="Cleaned my room">
-  <label>Category</label><div class="chiprow" id="af-cat">${CATS.map((c,i)=>`<button type="button" class="chip ${i===0?'sel':''}" data-cat="${c.k}">${c.l}</button>`).join('')}</div>
-  <label>Date</label><input id="af-date" type="date" value="${todayISO()}">
-  <label>Optional description</label><textarea id="af-desc" rows="2"></textarea>
-  <div style="margin-top:16px;display:flex;gap:10px"><button class="btn" data-submit-acc="1">Save</button><button class="btn ghost" data-close-modal="1">Cancel</button></div>`;
+
+  const myUid =
+    state.authUser.uid;
+
+  const mid =
+    state.modal.memberId ||
+    myUid;
+
+
+  const pickable =
+    isAdmin()
+    ?
+    state.members
+    :
+    state.members.filter(
+      m => m.id === myUid
+    );
+
+
+  return `
+    <h3>
+      Add Accomplishment
+    </h3>
+
+
+    <label>
+      Who?
+    </label>
+
+    <select
+      id="af-member"
+      ${isAdmin() ? '' : 'disabled'}
+    >
+
+      ${
+        pickable
+          .map(
+            m =>
+            `
+              <option
+                value="${m.id}"
+                ${
+                  m.id === mid
+                  ?
+                  'selected'
+                  :
+                  ''
+                }
+              >
+                ${esc(m.name)}
+              </option>
+            `
+          )
+          .join('')
+      }
+
+    </select>
+
+
+    <label>
+      What did you accomplish?
+    </label>
+
+    <input
+      id="af-text"
+      placeholder="Cleaned my room"
+    >
+
+
+    <label>
+      Category
+    </label>
+
+    <div
+      class="chiprow"
+      id="af-cat"
+    >
+
+      ${
+        CATS.map(
+          (c,i) =>
+          `
+            <button
+              type="button"
+              class="chip ${i===0?'sel':''}"
+              data-cat="${c.k}"
+            >
+              ${c.l}
+            </button>
+          `
+        ).join('')
+      }
+
+    </div>
+
+
+    <label>
+      Date
+    </label>
+
+    <input
+      id="af-date"
+      type="date"
+      value="${todayISO()}"
+    >
+
+
+    <label>
+      Optional description
+    </label>
+
+    <textarea
+      id="af-desc"
+      rows="2"
+    ></textarea>
+
+
+    <div style="
+      margin-top:16px;
+      display:flex;
+      gap:10px
+    ">
+
+      <button
+        class="btn"
+        data-submit-acc="1"
+      >
+        Save
+      </button>
+
+      <button
+        class="btn ghost"
+        data-close-modal="1"
+      >
+        Cancel
+      </button>
+
+    </div>
+  `;
+
 }
+
+
 function addMemberForm(){
-  return `<h3>Add Family Member</h3>
-  <label>Name</label><input id="am-name" placeholder="e.g. Sam">
-  <label>Character</label><div class="emoji-pick" id="am-emoji">${AVATARS.map((e,i)=>`<button type="button" class="${i===0?'sel':''}" data-e="${e}">${e}</button>`).join('')}</div>
-  <label>Color</label><div class="color-pick" id="am-color">${COLORS.map((c,i)=>`<button type="button" class="color-dot ${i===0?'sel':''}" data-c="${c}" style="background:${c}"></button>`).join('')}</div>
-  <div style="margin-top:16px;display:flex;gap:10px"><button class="btn" data-submit-member="1">Add</button><button class="btn ghost" data-close-modal="1">Cancel</button></div>`;
+
+  return `
+    <h3>
+      Add Family Member
+    </h3>
+
+
+    <label>
+      Name
+    </label>
+
+    <input
+      id="am-name"
+      placeholder="e.g. Sam"
+    >
+
+
+    <label>
+      Character
+    </label>
+
+    <div
+      class="emoji-pick"
+      id="am-emoji"
+    >
+
+      ${
+        AVATARS.map(
+          (e,i) =>
+          `
+            <button
+              type="button"
+              class="${i===0?'sel':''}"
+              data-e="${e}"
+            >
+              ${e}
+            </button>
+          `
+        ).join('')
+      }
+
+    </div>
+
+
+    <label>
+      Color
+    </label>
+
+    <div
+      class="color-pick"
+      id="am-color"
+    >
+
+      ${
+        COLORS.map(
+          (c,i) =>
+          `
+            <button
+              type="button"
+              class="color-dot ${i===0?'sel':''}"
+              data-c="${c}"
+              style="background:${c}"
+            ></button>
+          `
+        ).join('')
+      }
+
+    </div>
+
+
+    <div style="
+      margin-top:16px;
+      display:flex;
+      gap:10px
+    ">
+
+      <button
+        class="btn"
+        data-submit-member="1"
+      >
+        Add
+      </button>
+
+      <button
+        class="btn ghost"
+        data-close-modal="1"
+      >
+        Cancel
+      </button>
+
+    </div>
+  `;
+
 }
+
+
 function editCharForm(){
-  const m=state.members.find(x=>x.id===state.modal.memberId);
-  return `<h3>Edit ${esc(m.name)}'s Character</h3>
-  <label>Character</label><div class="emoji-pick" id="am-emoji">${AVATARS.map(e=>`<button type="button" class="${e===m.emoji?'sel':''}" data-e="${e}">${e}</button>`).join('')}</div>
-  <label>Color</label><div class="color-pick" id="am-color">${COLORS.map(c=>`<button type="button" class="color-dot ${c===m.color?'sel':''}" data-c="${c}" style="background:${c}"></button>`).join('')}</div>
-  <div style="margin-top:16px;display:flex;gap:10px"><button class="btn" data-submit-char="${m.id}">Save</button><button class="btn ghost" data-close-modal="1">Cancel</button></div>`;
+
+  const m =
+    state.members.find(
+      x => x.id === state.modal.memberId
+    );
+
+
+  if(!m)
+    return '';
+
+
+  return `
+    <h3>
+      Edit ${esc(m.name)}'s Character
+    </h3>
+
+
+    <label>
+      Character
+    </label>
+
+    <div
+      class="emoji-pick"
+      id="am-emoji"
+    >
+
+      ${
+        AVATARS.map(
+          e =>
+          `
+            <button
+              type="button"
+              class="${e===m.emoji?'sel':''}"
+              data-e="${e}"
+            >
+              ${e}
+            </button>
+          `
+        ).join('')
+      }
+
+    </div>
+
+
+    <label>
+      Color
+    </label>
+
+    <div
+      class="color-pick"
+      id="am-color"
+    >
+
+      ${
+        COLORS.map(
+          c =>
+          `
+            <button
+              type="button"
+              class="color-dot ${
+                c===m.color?'sel':''
+              }"
+              data-c="${c}"
+              style="background:${c}"
+            ></button>
+          `
+        ).join('')
+      }
+
+    </div>
+
+
+    <div style="
+      margin-top:16px;
+      display:flex;
+      gap:10px
+    ">
+
+      <button
+        class="btn"
+        data-submit-char="${m.id}"
+      >
+        Save
+      </button>
+
+      <button
+        class="btn ghost"
+        data-close-modal="1"
+      >
+        Cancel
+      </button>
+
+    </div>
+  `;
+
 }
+
+
 function addPrizeForm(){
-  return `<h3>New Prize</h3>
-  <label>Emoji</label><input id="ap-emoji" value="🎁" maxlength="2">
-  <label>Name</label><input id="ap-name" placeholder="e.g. Pick the movie">
-  <label>Cost (points)</label><input id="ap-cost" type="number" value="100">
-  <div style="margin-top:16px;display:flex;gap:10px"><button class="btn" data-submit-prize="1">Add</button><button class="btn ghost" data-close-modal="1">Cancel</button></div>`;
+
+  return `
+    <h3>
+      New Prize
+    </h3>
+
+
+    <label>
+      Emoji
+    </label>
+
+    <input
+      id="ap-emoji"
+      value="🎁"
+      maxlength="2"
+    >
+
+
+    <label>
+      Name
+    </label>
+
+    <input
+      id="ap-name"
+      placeholder="e.g. Pick the movie"
+    >
+
+
+    <label>
+      Cost (points)
+    </label>
+
+    <input
+      id="ap-cost"
+      type="number"
+      value="100"
+    >
+
+
+    <div style="
+      margin-top:16px;
+      display:flex;
+      gap:10px
+    ">
+
+      <button
+        class="btn"
+        data-submit-prize="1"
+      >
+        Add
+      </button>
+
+      <button
+        class="btn ghost"
+        data-close-modal="1"
+      >
+        Cancel
+      </button>
+
+    </div>
+  `;
+
 }
 
-// ---------- Global bindings ----------
+
+/* GLOBAL BINDINGS */
+
 function bindGlobal(){
-  const qa=s=>[...document.querySelectorAll(s)];
-  qa('[data-nav]').forEach(b=>b.onclick=()=>{ if(b.dataset.nav==='settings' && !isAdmin()) return; state.view=b.dataset.nav; if(b.dataset.member) state.activeMember=b.dataset.member; state.openWeek=null; render();});
-  qa('[data-logout]').forEach(b=>b.onclick=()=>window.fbSignOut());
-  qa('[data-open]').forEach(el=>el.onclick=()=>{state.activeMember=el.dataset.open; state.view='progress'; render();});
-  qa('[data-add-acc]').forEach(b=>b.onclick=()=>{state.modal={type:'addAcc',memberId:b.dataset.member||state.activeMember}; render();});
-  qa('[data-close-modal]').forEach(b=>b.onclick=()=>{state.modal=null; render();});
-  qa('[data-add-member]').forEach(b=>b.onclick=()=>{state.modal={type:'addMember'}; render();});
-  qa('[data-edit-char]').forEach(b=>b.onclick=()=>{state.modal={type:'editChar',memberId:b.dataset.editChar}; render();});
-  qa('[data-add-prize]').forEach(b=>b.onclick=()=>{state.modal={type:'addPrize'}; render();});
-  qa('[data-remove-member]').forEach(b=>b.onclick=()=>{state.members=state.members.filter(m=>m.id!==b.dataset.removeMember); persist();});
-  qa('[data-remove-prize]').forEach(b=>b.onclick=()=>{state.prizes=state.prizes.filter(p=>p.id!==b.dataset.removePrize); persist();});
-  qa('[data-point-cat]').forEach(inp=>inp.onchange=()=>{state.points[inp.dataset.pointCat]=parseInt(inp.value)||0; save(state);});
-  qa('[data-end-week]').forEach(b=>b.onclick=()=>{ if(confirm('End this week and archive results?')) endWeek(); });
-  qa('[data-week]').forEach(el=>el.onclick=()=>{state.openWeek=parseInt(el.dataset.week); render();});
-  qa('[data-set-goal]').forEach(b=>b.onclick=()=>{const[mid,pid]=b.dataset.setGoal.split('|'); state.members.find(m=>m.id===mid).goalId=pid; persist();});
-  qa('[data-redeem]').forEach(b=>b.onclick=()=>{const[mid,pid]=b.dataset.redeem.split('|'); const m=state.members.find(x=>x.id===mid); const p=state.prizes.find(x=>x.id===pid); m.saved-=p.cost; m.redeemed=(m.redeemed||0)+1; m.goalId=null; checkAchievements(m); showToast('Reward redeemed! 🎉');});
 
-  // modal forms
-  const q=s=>document.querySelector(s);
-  if(q('#af-cat')) qa('#af-cat .chip').forEach(c=>c.onclick=()=>{qa('#af-cat .chip').forEach(x=>x.classList.remove('sel')); c.classList.add('sel');});
-  if(q('[data-submit-acc]')) q('[data-submit-acc]').onclick=()=>{
-    const text=q('#af-text').value.trim(); if(!text) return;
-    const cat=(q('#af-cat .chip.sel')||{}).dataset?.cat||'other';
-    addAccomplishment(q('#af-member').value,{text,cat,date:q('#af-date').value||todayISO(),desc:q('#af-desc').value});
-    state.modal=null; persist(); };
-  if(q('#am-emoji')) qa('#am-emoji button').forEach(b=>b.onclick=()=>{qa('#am-emoji button').forEach(x=>x.classList.remove('sel')); b.classList.add('sel');});
-  if(q('#am-color')) qa('#am-color button').forEach(b=>b.onclick=()=>{qa('#am-color button').forEach(x=>x.classList.remove('sel')); b.classList.add('sel');});
-  if(q('[data-submit-member]')) q('[data-submit-member]').onclick=()=>{
-    const name=q('#am-name').value.trim(); if(!name) return;
-    const emoji=(q('#am-emoji .sel')||{}).dataset?.e||AVATARS[0];
-    const color=(q('#am-color .sel')||{}).dataset?.c||COLORS[0];
-    state.members.push({id:uid(),name,emoji,color,saved:0,accomplishments:[],achv:[],wins:0,redeemed:0,goalId:null});
-    state.modal=null; persist(); };
-  if(q('[data-submit-char]')) q('[data-submit-char]').onclick=(e)=>{
-    const mid=e.target.dataset.submitChar; const m=state.members.find(x=>x.id===mid);
-    m.emoji=(q('#am-emoji .sel')||{}).dataset?.e||m.emoji; m.color=(q('#am-color .sel')||{}).dataset?.c||m.color;
-    state.modal=null; persist(); };
-  if(q('[data-submit-prize]')) q('[data-submit-prize]').onclick=()=>{
-    const name=q('#ap-name').value.trim(); if(!name) return;
-    state.prizes.push({id:uid(),name,emoji:q('#ap-emoji').value||'🎁',cost:parseInt(q('#ap-cost').value)||100});
-    state.modal=null; persist(); };
+  const qa =
+    s => [...document.querySelectorAll(s)];
+
+
+  qa('[data-nav]').forEach(b => {
+
+    b.onclick = () => {
+
+      if(
+        b.dataset.nav === 'settings' &&
+        !isAdmin()
+      ){
+        return;
+      }
+
+      state.view =
+        b.dataset.nav;
+
+      if(b.dataset.member){
+
+        state.activeMember =
+          b.dataset.member;
+
+      }
+
+      state.openWeek = null;
+
+      render();
+
+    };
+
+  });
+
+
+  qa('[data-logout]').forEach(b => {
+
+    b.onclick =
+      () => window.fbSignOut();
+
+  });
+
+
+  qa('[data-open]').forEach(el => {
+
+    el.onclick = () => {
+
+      state.activeMember =
+        el.dataset.open;
+
+      state.view =
+        'progress';
+
+      render();
+
+    };
+
+  });
+
+
+  qa('[data-add-acc]').forEach(b => {
+
+    b.onclick = () => {
+
+      state.modal = {
+        type:'addAcc',
+        memberId:
+          b.dataset.member ||
+          state.activeMember
+      };
+
+      render();
+
+    };
+
+  });
+
+
+  qa('[data-close-modal]').forEach(b => {
+
+    b.onclick = () => {
+
+      state.modal = null;
+
+      render();
+
+    };
+
+  });
+
+
+  qa('[data-add-member]').forEach(b => {
+
+    b.onclick = () => {
+
+      state.modal = {
+        type:'addMember'
+      };
+
+      render();
+
+    };
+
+  });
+
+
+  qa('[data-edit-char]').forEach(b => {
+
+    b.onclick = () => {
+
+      state.modal = {
+        type:'editChar',
+        memberId:b.dataset.editChar
+      };
+
+      render();
+
+    };
+
+  });
+
+
+  qa('[data-add-prize]').forEach(b => {
+
+    b.onclick = () => {
+
+      state.modal = {
+        type:'addPrize'
+      };
+
+      render();
+
+    };
+
+  });
+
+
+  qa('[data-remove-member]').forEach(b => {
+
+    b.onclick = () => {
+
+      state.members =
+        state.members.filter(
+          m =>
+            m.id !==
+            b.dataset.removeMember
+        );
+
+      persist();
+
+    };
+
+  });
+
+
+  qa('[data-remove-prize]').forEach(b => {
+
+    b.onclick = () => {
+
+      state.prizes =
+        state.prizes.filter(
+          p =>
+            p.id !==
+            b.dataset.removePrize
+        );
+
+      persist();
+
+    };
+
+  });
+
+
+  qa('[data-point-cat]').forEach(inp => {
+
+    inp.onchange = () => {
+
+      state.points[
+        inp.dataset.pointCat
+      ] =
+        parseInt(inp.value) || 0;
+
+      save(state);
+
+    };
+
+  });
+
+
+  qa('[data-end-week]').forEach(b => {
+
+    b.onclick = () => {
+
+      if(
+        confirm(
+          'End this week and archive results?'
+        )
+      ){
+
+        endWeek();
+
+      }
+
+    };
+
+  });
+
+
+  qa('[data-week]').forEach(el => {
+
+    el.onclick = () => {
+
+      state.openWeek =
+        parseInt(el.dataset.week);
+
+      render();
+
+    };
+
+  });
+
+
+  qa('[data-set-goal]').forEach(b => {
+
+    b.onclick = () => {
+
+      const [mid,pid] =
+        b.dataset.setGoal.split('|');
+
+      const m =
+        state.members.find(
+          m => m.id === mid
+        );
+
+      if(!m) return;
+
+      m.goalId = pid;
+
+      persist();
+
+    };
+
+  });
+
+
+  qa('[data-redeem]').forEach(b => {
+
+    b.onclick = () => {
+
+      const [mid,pid] =
+        b.dataset.redeem.split('|');
+
+      const m =
+        state.members.find(
+          x => x.id === mid
+        );
+
+      const p =
+        state.prizes.find(
+          x => x.id === pid
+        );
+
+      if(!m || !p) return;
+
+      m.saved -= p.cost;
+
+      m.redeemed =
+        (m.redeemed || 0) + 1;
+
+      m.goalId = null;
+
+      checkAchievements(m);
+
+      showToast(
+        'Reward redeemed! 🎉'
+      );
+
+    };
+
+  });
+
+
+  const q =
+    s => document.querySelector(s);
+
+
+  /* ACCOMPLISHMENT CATEGORY */
+
+  if(q('#af-cat')){
+
+    qa('#af-cat .chip')
+      .forEach(c => {
+
+        c.onclick = () => {
+
+          qa('#af-cat .chip')
+            .forEach(
+              x =>
+                x.classList.remove('sel')
+            );
+
+          c.classList.add('sel');
+
+        };
+
+      });
+
+  }
+
+
+  /* SAVE ACCOMPLISHMENT */
+
+  if(q('[data-submit-acc]')){
+
+    q('[data-submit-acc]').onclick =
+      () => {
+
+        const text =
+          q('#af-text')
+            .value
+            .trim();
+
+        if(!text) return;
+
+
+        const cat =
+          (
+            q('#af-cat .chip.sel') ||
+            {}
+          )
+          .dataset?.cat ||
+          'other';
+
+
+        addAccomplishment(
+          q('#af-member').value,
+          {
+            text,
+            cat,
+            date:
+              q('#af-date').value ||
+              todayISO(),
+            desc:
+              q('#af-desc').value
+          }
+        );
+
+
+        state.modal = null;
+
+        persist();
+
+      };
+
+  }
+
+
+  /* CHARACTER PICKER */
+
+  if(q('#am-emoji')){
+
+    qa('#am-emoji button')
+      .forEach(b => {
+
+        b.onclick = () => {
+
+          qa('#am-emoji button')
+            .forEach(
+              x =>
+                x.classList.remove('sel')
+            );
+
+          b.classList.add('sel');
+
+        };
+
+      });
+
+  }
+
+
+  /* COLOR PICKER */
+
+  if(q('#am-color')){
+
+    qa('#am-color button')
+      .forEach(b => {
+
+        b.onclick = () => {
+
+          qa('#am-color button')
+            .forEach(
+              x =>
+                x.classList.remove('sel')
+            );
+
+          b.classList.add('sel');
+
+        };
+
+      });
+
+  }
+
+
+  /* LOCAL ADD MEMBER */
+
+  if(q('[data-submit-member]')){
+
+    q('[data-submit-member]').onclick =
+      () => {
+
+        const name =
+          q('#am-name')
+            .value
+            .trim();
+
+        if(!name) return;
+
+
+        const emoji =
+          (
+            q('#am-emoji .sel') ||
+            {}
+          )
+          .dataset?.e ||
+          AVATARS[0];
+
+
+        const color =
+          (
+            q('#am-color .sel') ||
+            {}
+          )
+          .dataset?.c ||
+          COLORS[0];
+
+
+        state.members.push({
+
+          id:uid(),
+
+          name,
+
+          emoji,
+
+          color,
+
+          saved:0,
+
+          accomplishments:[],
+
+          achv:[],
+
+          wins:0,
+
+          redeemed:0,
+
+          goalId:null
+
+        });
+
+
+        state.modal = null;
+
+        persist();
+
+      };
+
+  }
+
+
+  /* EDIT CHARACTER */
+
+  if(q('[data-submit-char]')){
+
+    q('[data-submit-char]').onclick =
+      e => {
+
+        const mid =
+          e.target.dataset.submitChar;
+
+        const m =
+          state.members.find(
+            x => x.id === mid
+          );
+
+        if(!m) return;
+
+
+        m.emoji =
+          (
+            q('#am-emoji .sel') ||
+            {}
+          )
+          .dataset?.e ||
+          m.emoji;
+
+
+        m.color =
+          (
+            q('#am-color .sel') ||
+            {}
+          )
+          .dataset?.c ||
+          m.color;
+
+
+        state.modal = null;
+
+        persist();
+
+      };
+
+  }
+
+
+  /* ADD PRIZE */
+
+  if(q('[data-submit-prize]')){
+
+    q('[data-submit-prize]').onclick =
+      () => {
+
+        const name =
+          q('#ap-name')
+            .value
+            .trim();
+
+        if(!name) return;
+
+
+        state.prizes.push({
+
+          id:uid(),
+
+          name,
+
+          emoji:
+            q('#ap-emoji').value ||
+            '🎁',
+
+          cost:
+            parseInt(
+              q('#ap-cost').value
+            ) || 100
+
+        });
+
+
+        state.modal = null;
+
+        persist();
+
+      };
+
+  }
+
 }
 
-function esc(s){ return (s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+/* ESCAPE HTML */
+
+function esc(s){
+
+  return (s || '')
+    .replace(
+      /[&<>"']/g,
+      c => ({
+        '&':'&amp;',
+        '<':'&lt;',
+        '>':'&gt;',
+        '"':'&quot;',
+        "'":'&#39;'
+      })[c]
+    );
+
+}
+
 
 render();
+
 </script>
+
 </body>
 </html>
