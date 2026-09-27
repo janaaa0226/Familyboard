@@ -88,6 +88,31 @@ input,select,textarea{width:100%;padding:11px 13px;border-radius:12px;border:2px
 </head>
 <body>
 <div id="root"></div>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
+  import { getAuth } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
+  import { getFirestore } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDT0OvRdTjwz5of3Mdi2LzU8yZszf8b9L4",
+    authDomain: "family-board-d5fd2.firebaseapp.com",
+    projectId: "family-board-d5fd2",
+    storageBucket: "family-board-d5fd2.firebasestorage.app",
+    messagingSenderId: "138120603198",
+    appId: "1:138120603198:web:111c48369098902e5cd36f"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  // Temporary: exposes these so we can confirm the connection works.
+  // We'll remove this and wire things up properly in the next step.
+  window.firebaseApp = app;
+  window.firebaseAuth = auth;
+  window.firebaseDb = db;
+  console.log("✅ Firebase connected:", app.name);
+</script>
 <script>
 const AVATARS=['🦊','🐻','🐱','🐼','🦁','🐨','🐰','🦄','🐸','🐯','🦖','🐧'];
 const COLORS=['#FFB4A2','#FFD97D','#9BE3C6','#A7C7FF','#D8B4FE','#FF9EB5'];
